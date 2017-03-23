@@ -183,6 +183,11 @@ type Decoder struct {
 	// of whether an end element is present.
 	AutoClose []string
 
+	// When Strict == false, AutoCloseAfterCharData indicates a set of elements
+	// to consider closed before any Token other than CharData, regardless of
+	// whether an end element is present.
+	AutoCloseAfterCharData []string
+
 	// Entity can be used to map non-standard entity names to string replacements.
 	// The parser behaves as if these standard mappings are present in the map,
 	// regardless of the actual map content:
@@ -530,6 +535,18 @@ func (d *Decoder) autoClose(t Token) (Token, bool) {
 				return EndElement{d.stk.name}, true
 			}
 			break
+		}
+	}
+	if _, ok := t.(CharData); !ok {
+		for _, s := range d.AutoCloseAfterCharData {
+			if strings.ToLower(s) == name {
+				// This one should be auto closed if t doesn't close it.
+				et, ok := t.(EndElement)
+				if !ok || et.Name.Local != name {
+					return EndElement{d.stk.name}, true
+				}
+				break
+			}
 		}
 	}
 	return nil, false
