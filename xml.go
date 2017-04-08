@@ -531,7 +531,7 @@ func (d *Decoder) autoClose(t Token) (Token, bool) {
 		if strings.ToLower(s) == name {
 			// This one should be auto closed if t doesn't close it.
 			et, ok := t.(EndElement)
-			if !ok || et.Name.Local != name {
+			if !ok || strings.ToLower(et.Name.Local) != name {
 				return EndElement{d.stk.name}, true
 			}
 			break
@@ -542,7 +542,7 @@ func (d *Decoder) autoClose(t Token) (Token, bool) {
 			if strings.ToLower(s) == name {
 				// This one should be auto closed if t doesn't close it.
 				et, ok := t.(EndElement)
-				if !ok || et.Name.Local != name {
+				if !ok || strings.ToLower(et.Name.Local) != name {
 					return EndElement{d.stk.name}, true
 				}
 				break
