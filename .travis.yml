@@ -1,0 +1,11 @@
+language: go
+
+os:
+  - linux
+
+go:
+  - 1.9.x
+  - master
+
+script:
+  - go test -v -covermode=count
