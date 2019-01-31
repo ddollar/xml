@@ -593,8 +593,9 @@ Loop:
 	return nil
 }
 
-func copyValue(dst reflect.Value, src []byte) (err error) {
+func copyValue(dst reflect.Value, srcr []byte) (err error) {
 	dst0 := dst
+	src := bytes.TrimSpace(srcr)
 
 	if dst.Kind() == reflect.Ptr {
 		if dst.IsNil() {
